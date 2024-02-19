@@ -19,11 +19,37 @@
 
 -------------------------------*/
 
-function knightMoves(start, end) {
-    console.log(start);
-    console.log(end);
+/* ---
+pass in a coordinate and will return all possible moves assuming a knight
+is on that spot. --- */
+function calcPossibleMoves(origin) {
+    let moves = [
+        [origin[0] + 2, origin[1] + 1],
+        [origin[0] + 2, origin[1] - 1],
+        [origin[0] - 2, origin[1] + 1],
+        [origin[0] - 2, origin[1] - 1],
+        [origin[0] + 1, origin[1] + 2],
+        [origin[0] + 1, origin[1] - 2],
+        [origin[0] - 1, origin[1] + 2],
+        [origin[0] - 1, origin[1] - 2]
+    ];
+
+    moves = moves.filter((point) => {
+        if ((point[0] >= 0 && point[1] >= 0) &&
+            (point[0] <= 7 && point[1] <= 7)) {
+            return point;
+        };
+    });
+
+    return moves;
 };
-knightMoves([0,0], [1,2]);
+
+function knightMoves(start, end) {
+    
+    console.log(calcPossibleMoves(start));
+
+};
+knightMoves([0,0], [7,7]);
 
 /*
 
