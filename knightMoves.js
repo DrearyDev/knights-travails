@@ -45,20 +45,58 @@ function calcPossibleMoves(origin) {
 };
 
 function knightMoves(start, end) {
-    
-    console.log(calcPossibleMoves(start));
+    //make sure coordinates are valid
+    for (let i = 0; i < 2; i++) {
+        if (start[i] < 0 || start[i] > 7){ return 'invalid start coordinate' };
+        if (end[i] < 0 || end[i] > 7){ return 'invalid end coordinate' };
+    };
 
+    const queue = [[start]];
+    const visited = new Set();
+
+    while(queue[0]) {
+        const path = queue.shift();
+        const lastSquare = path[path.length - 1];
+
+        if (lastSquare[0] === end[0] && lastSquare[1] === end[1]) {
+            return path;
+        };
+
+        for (const move of calcPossibleMoves(lastSquare)) {
+            if (!visited.has(`[${move}]`)) {
+                queue.push([...path, move]);
+                visited.add(`[${move}]`);
+            };
+        };
+    };
+
+    return null;
 };
-knightMoves([0,0], [7,7]);
+
+console.log(knightMoves([0,0], [7,7]));
 
 /*
 
-- must start at start coordinate and end at end coordinate
+queue => is a queue of arrays which represent different paths that we could take.
 
-- must only move in the knights 'L' shape
+path => is the next up path in the queue to find the next square by using calcPossibleMoves(). If the
+square returned has not been visited before, then we push the path plus that move to the queue and
+then add the square to the visited set.
 
-- return array of coordinates including start and end ones
+lastSquare => The last square that was visited that we got from the path that was next up in our
+queue. We use this to calculate the possible moves we could do and then only use the ones that end up
+on squares we havent visited yet.
 
-- must be shortest possible path
+visited => is a set with all squares visited. we never want to go on a square we've already been on
+within a path because that path will never be the shortest route to the end. We use this to check if
+a square has been visited already. If not, then we can add it to the end of path and queue it up.
+
+I use a BFS algorithm because we go in level order and we will find the first path to reach the end
+faster than with DFS. We can return that path right away since we KNOW it must be the shortest since
+it was the first to reach the end and we dont care about the other paths.
 
 */
+
+
+
+
